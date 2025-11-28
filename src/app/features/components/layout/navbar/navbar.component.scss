@@ -1,0 +1,11 @@
+@import'../../../../../assets/css/variables';
+
+.nav-link {
+    font-size: 18px;
+    font-weight: 700;
+
+    &.active,
+    &:hover {
+        color: $primary-color;
+    }
+}

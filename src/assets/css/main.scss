@@ -1,0 +1,25 @@
+@import './variables';
+
+body {
+    font-family: $font-primary;
+}
+
+a {
+    text-decoration: none;
+
+    &:hover {
+        color: $primary-color;
+    }
+}
+
+.bg-primary-color {
+    background-color: $primary-color !important;
+}
+
+.text-primary-color {
+    color: $primary-color;
+}
+
+.text-color {
+    color: #242477;
+}

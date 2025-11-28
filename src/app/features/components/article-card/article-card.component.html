@@ -1,0 +1,35 @@
+<div *ngIf="layout === 'layout-1'">
+    <a [routerLink]="['/articles', index]">
+        <div class="card border-0 position-relative">
+            <div class="overlay"></div>
+            <div class="ratio ratio-4x3">
+                <img [src]="article.urlToImage" alt="" class="card-top-img object-fit-cover rounded-4" loading="lazy"
+                    fetchpriority="high" decoding="async" (error)="onImageError($event)">
+            </div>
+
+            <div class="card-body position-absolute bottom-0 start-0 z-2 p-4 text-white">
+                <span class="article-cat">{{ article.category || 'General' }}</span>
+                <h4 class="mt-4" [appClampText]="2">{{ article.title }}</h4>
+            </div>
+        </div>
+    </a>
+
+</div>
+
+<div *ngIf="layout === 'layout-2'">
+    <a [routerLink]="['/articles', index]">
+        <div class="card border-0">
+
+            <div class="ratio ratio-4x3 position-relative">
+                <div class="overlay"></div>
+                <img [src]="article.urlToImage" alt="" class="card-top-img object-fit-cover rounded-4" loading="lazy"
+                    fetchpriority="high" decoding="async" (error)="onImageError($event)">
+            </div>
+
+            <div class="card-body">
+
+                <h4 class="mb-3" [appClampText]="2">{{ article.title }}</h4>
+            </div>
+        </div>
+    </a>
+</div>
