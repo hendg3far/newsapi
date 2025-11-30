@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Article } from '../interfaces/article';
-import { ArticleSource } from '../interfaces/article-source';
 import { NewsSource } from '../interfaces/news-source';
 
 @Injectable({
@@ -62,22 +61,24 @@ export class NewsService {
     );
   }
 
-  getPopularNews(params: { query?: string; from?: string; to?: string } = {}): Observable<Article[]> {
-    // Set default values if not provided
-    const query = params.query || 'apple';
-    const from = params.from || new Date().toISOString().split('T')[0];
-    const to = params.to || new Date().toISOString().split('T')[0];
 
-    let httpParams = new HttpParams()
-      .set('q', query)
-      .set('from', from)
-      .set('to', to)
-      .set('sortBy', 'popularity')
-      .set('apiKey', this.apiKey);
+  getArticleByUrl(url: string): Observable<Article> {
+    return this.getCategories().pipe(
+      switchMap(categories => {
+        const categoryObservables = categories.map(cat => this.getNewsByCategory(cat));
 
-    return this.http
-      .get<{ articles: Article[] }>(`${this.apiUrl}/everything`, { params: httpParams })
-      .pipe(map(res => res.articles));
+        return forkJoin({
+          top: this.getTopHeadlines(),
+          cats: forkJoin(categoryObservables)
+        });
+      }),
+      map(({ top, cats }) => {
+        const allArticles = [...top, ...cats.flat()];
+        const found = allArticles.find(a => a.url === url);
+        if (!found) throw new Error('Article not found');
+        return found;
+      })
+    );
   }
 
 }

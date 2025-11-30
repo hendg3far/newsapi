@@ -20,9 +20,6 @@ export class HomeComponent implements OnInit {
 
   articlesByCategory: { [key: string]: Article[] } = {};
 
-
-
-
   constructor(private newsService: NewsService) { }
 
   ngOnInit(): void {

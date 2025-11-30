@@ -10,11 +10,4 @@ export const routes: Routes = [
                 (m) => m.ArticleDetailsComponent
             ),
     },
-    {
-        path: 'popular',
-        loadComponent: () =>
-            import('./features/popular-news/popular-news.component').then(
-                (m) => m.PopularNewsComponent
-            ),
-    },
 ];

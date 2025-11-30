@@ -20,4 +20,9 @@ export class ArticleCardComponent {
   onImageError(event: any) {
     event.target.src = 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
   }
+
+  get articleId(): string {
+    const id = encodeURIComponent(this.article.url);
+    return id
+  }
 }

@@ -1,5 +1,5 @@
 <div *ngIf="layout === 'layout-1'">
-    <a [routerLink]="['/articles', index]">
+    <a [routerLink]="['/articles', articleId]">
         <div class="card border-0 position-relative">
             <div class="overlay"></div>
             <div class="ratio ratio-4x3">
@@ -17,7 +17,7 @@
 </div>
 
 <div *ngIf="layout === 'layout-2'">
-    <a [routerLink]="['/articles', index]">
+    <a [routerLink]="['/articles', articleId]">
         <div class="card border-0">
 
             <div class="ratio ratio-4x3 position-relative">

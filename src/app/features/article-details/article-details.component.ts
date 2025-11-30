@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NewsService } from '../../core/services/news.service';
 import { DatePipe, NgIf } from '@angular/common';
 import { Article } from '../../core/interfaces/article';
+import { of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-article-details',
@@ -21,20 +22,25 @@ export class ArticleDetailsComponent {
   ) { }
 
   ngOnInit(): void {
-    const index = this.route.snapshot.paramMap.get('id');
+    // متابعة أي تغير في params
+    this.route.paramMap.pipe(
+      switchMap(params => {
+        const encodedUrl = params.get('id');
+        if (!encodedUrl) {
+          this.errorMessage = 'Invalid article ID';
+          return of(null);
+        }
+        const articleUrl = decodeURIComponent(encodedUrl);
 
-    if (index !== null) {
-      this.articleService.getTopHeadlines().subscribe({
-        next: (articles) => {
-          this.article = articles[+index];
-        },
-        error: (err) => {
-          console.error(err);
-          this.errorMessage = 'Failed to load article';
-        },
-      });
-    } else {
-      this.errorMessage = 'Invalid article ID';
-    }
+        // البحث في كل المقالات (top headlines + كل categories)
+        return this.articleService.getArticleByUrl(articleUrl);
+      })
+    ).subscribe({
+      next: article => {
+        if (article) this.article = article;
+      },
+      error: () => this.errorMessage = 'Article not found'
+    });
   }
+
 }
