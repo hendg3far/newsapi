@@ -22,7 +22,6 @@ export class ArticleDetailsComponent {
   ) { }
 
   ngOnInit(): void {
-    // متابعة أي تغير في params
     this.route.paramMap.pipe(
       switchMap(params => {
         const encodedUrl = params.get('id');
@@ -32,7 +31,6 @@ export class ArticleDetailsComponent {
         }
         const articleUrl = decodeURIComponent(encodedUrl);
 
-        // البحث في كل المقالات (top headlines + كل categories)
         return this.articleService.getArticleByUrl(articleUrl);
       })
     ).subscribe({
